@@ -1,0 +1,186 @@
+#include "iostream"
+using namespace std;
+int n, m, x = 0, y = 0, counter = 0, pos = 0;
+// n - Кол-во вершин, m - Кол-во ребер, x и y - Точки соединения ребер, counter - Счетчик ввода, pos - Счетчик вывода массива всех ребер 
+char choice; // Переменная выбора
+
+
+
+int main()
+{
+    setlocale(LC_ALL, "Russian");
+
+    do {
+
+        cout << "Введите количество вершин: ";
+        cin >> n;
+        if (n < 0) {
+            do {
+                cout << "Ошибка. Невозможно построить граф. Введите корректное количество вершин." << endl;
+                cin >> n;
+            } while (n < 0);
+        }
+        cout << "Введите количество рёбер: ";
+        cin >> m;
+        if (m > n * 2 or m <= 0) {
+            do {
+                cout << "Ошибка. Невозможно построить граф. Введите корректное количество ребер." << endl;
+                cin >> m;
+            } while (m > n * 2 or m <= 0);
+        }
+
+        int** arredge = new int* [n];
+        for (int i = 0; i < n; i++) {
+            arredge[i] = new int[n];
+        }
+        int** arrinc = new int* [n];
+        for (int i = 0; i < n; i++) {
+            arrinc[i] = new int[m];
+        }
+        int* coordinates;
+        coordinates = new int[m * 2];
+
+        for (int i = 0;i < n;i++) {
+            for (int j = 0;j < n;j++)
+            {
+                arredge[i][j] = 0;
+
+            }
+        }
+        for (int i = 0;i < n;i++) {
+            for (int j = 0;j < m;j++)
+            {
+                arrinc[i][j] = 0;
+
+            }
+        }
+    Start:
+        cout << "Какой это граф?\n" <<
+            "1.Ориентированный\n" <<
+            "2.Неориентированный\n" << endl;
+        cin >> choice;
+
+        switch (choice) {
+        case '1':
+            cout << "Введите рёбра через пробел: " << endl;
+            for (int i = 0;i < m;i++)
+            {
+                cout << "Введите " << i + 1 << " ребро: ";
+                cin >> x >> y;
+                cout << endl;
+                coordinates[pos] = x;
+                coordinates[pos + 1] = y;
+                pos = pos + 2;
+                arrinc[x - 1][counter] = 1;
+                arredge[x - 1][y - 1] = 1;
+                counter++;
+
+            }
+            cout << endl;
+
+
+            break;
+
+        case '2':
+            cout << "Введите начало и конец ребра через пробел: " << endl;
+            for (int i = 0;i < m;i++)
+            {
+                cout << "Введите " << i + 1 << " ребро: ";
+                cin >> x >> y;
+                if (x <= 0 or y <= 0) {
+                    do {
+                        cout << "Ошибка. Введите корректное ребро." << endl;
+                        cin >> x >> y;
+                    } while (x <= 0 or y <= 0);
+                }
+                cout << endl;
+                arredge[x - 1][y - 1] = 1;
+                arredge[y - 1][x - 1] = 1;
+                coordinates[pos] = x;
+                coordinates[pos + 1] = y;
+                pos = pos + 2;
+                arrinc[x - 1][counter] = 1;
+                arrinc[y - 1][counter] = 1;
+                counter++;
+
+            }
+            cout << endl;
+            break;
+
+        default:
+            cout << "Ошибка. Повториите ввод" << endl;
+            goto Start;
+        }
+
+        cout << "Матрица смежности: " << endl;
+        cout << "  ";
+        for (int i = 0; i < n; i++) {
+            cout << i + 1 << " ";
+        }
+        cout << endl;
+        for (int i = 0;i < n;i++)
+        {
+            cout << i + 1 << " ";
+            for (int j = 0;j < n;j++)
+            {
+                cout << arredge[i][j] << " ";
+            }
+
+            cout << endl;
+        }
+
+
+        cout << "Список смежности" << endl;
+        for (int i = 0;i < n;i++)
+        {
+            cout << i + 1 << ": ";
+            for (int j = 0;j < n;j++)
+            {
+                if (arredge[i][j] == 1)
+                    cout << j + 1 << ", ";
+            }
+            cout << endl;
+        }
+
+        cout << "Матрица инцидентности" << endl;
+        cout << " ";
+        for (int i = 0;i < m;i++)
+        {
+            cout << coordinates[i * 2] << "-" << coordinates[i * 2 + 1] << "\t";
+        }
+        cout << endl;
+
+        for (int i = 0;i < n;i++)
+        {
+            cout << i + 1 << ": ";
+            for (int j = 0;j < m;j++)
+            {
+                cout << arrinc[i][j] << "\t ";
+            }
+            cout << endl;
+        }
+        counter = 0;
+        pos = 0;
+
+        delete[] coordinates;
+
+        for (int i = 0; i < n; i++) {
+            delete[] arrinc[i];
+        }
+        delete[] arrinc;
+
+        for (int i = 0; i < n; i++) {
+            delete[] arredge[i];
+        }
+        delete[] arredge;
+        cout << "Перезапустить программу?\n" <<
+            "1.Да\n" <<
+            "q.Выйти" << endl;
+        cin >> choice;
+
+    } while (choice != 'q');
+
+
+    return 0;
+}
+
