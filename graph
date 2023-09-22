@@ -72,6 +72,8 @@ int main()
                 coordinates[pos + 1] = y;
                 pos = pos + 2;
                 arrinc[x - 1][counter] = 1;
+                arrinc[y - 1][counter] = -1;
+                
                 arredge[x - 1][y - 1] = 1;
                 counter++;
 
@@ -183,4 +185,3 @@ int main()
 
     return 0;
 }
-
